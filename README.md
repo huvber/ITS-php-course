@@ -5,8 +5,9 @@
 * 01 Introduction
 * 02 Syntax and basic operation
 * 03 Function
-* 04 Flow Control
 * 05 Array
+* 04 Flow Control
+* 04 Request in PHP (SUPERGLOBALS)
 
 ## Introduction
 
@@ -371,4 +372,106 @@ I will show you the definition of these construct. Every flow control in PHP can
     <repeated condition for each element having key and value >
   <?php endforeach; ?>
 ```
+
 ## REQUESTS IN PHP (SUPERGLOBALS)
+
+There are in PHP some variables that are available in all part of your code,
+without importing them or *globalize* them (the act to put `global` before a variable,
+to let it available inside a function). These variables are called **superglobals**
+and allow you to access to specific information. The most common used of this kind of
+variables are:
+  * `$GLOBALS` (useful to store global informations you need in all your software)
+  * `$_SERVER` (contain info about your server and the request of the webpage)
+      see (http://php.net/manual/it/reserved.variables.server.php)
+  * `$_GET` (contains the query string parameters as array)
+  * `$_POST` (contains the form input value as array)
+  * `$_FILES` (contains info and files sent by post request with multipart/data form)
+  * `$_COOKIE` (contains information about client cookies as array)
+  * `$_SESSION` (contains the store session of a request)
+  * `$_REQUEST` (contains the merged data of `$_GET`, `$_POST` and `$_COOKIE`)
+  * `$_ENV` (contains the environments variables passed by the http server when run php)
+
+Some of them are *read-only* variables in a way that even if you edit them the next iteration
+they will be restore as original.
+
+### `$_GET`
+
+The `$_GET` variables contains the query string parameters as associative array.
+For example if we have a PHP script called *index.php* in our localhost directory
+calling it with this url:
+```
+  http://localhost/index.php?var1=1&var2=foo
+```
+we will have inside the `$_GET` variables something like this:
+```php
+<?php
+  $_GET === array(
+    'var1' => '1',
+    'var2' => 'foo'
+  ):
+?>
+```
+
+It allow to parameterize your code based on the query string sent.
+
+### `$_POST`
+
+As `$_GET` variable `$_POST` contain an associative array with the query body of
+a **POST** request. When you send a form, for example, your client will send a
+**POST** request to an HTTP server with the inputs of your form as key-value couples
+inside the post body. You can see in [this](https://www.tutorialspoint.com/http/http_methods.htm) page
+some description of the various HTTP request methods. POST is one of them.
+
+Let's see how it works with an example.
+if I have a page with a form like this one:
+```html
+...
+<form method="post" action="">
+  <input type="text" name="var1" value="1" />
+  <input type="text" name="var2" value="foo" />
+  <input type="submit" value="send" />
+</form>
+```
+And we will press the *send* button it will reload the page (because if the `action`
+attribute of the  `form` tag is empty it will send to itself) and we will have in the
+`$_POST` variable something like this:
+
+```php
+<?php
+  $_POST === array(
+    'var1' => '1',
+    'var2' => 'foo'
+  ):
+?>
+```
+
+So with this variable we can interact with the user by using form (or POST ajax requests)
+and allow our software to be dynamic and use client information.
+
+### `$_SESSION`
+
+The `$_SESSION` variables allow to store data linked to a specific client-server section.
+When a client will connect to your page for the first time, the server will create a specific
+and unique **session_id** and sent it back to the client as a cookie. For that point the server
+could be access to a specific part of the memory associated to the session_id and read and write informations.
+
+By using the `$_SESSION` variable we can access to that informations and manipulate that.
+In order to use this variable we will first need to tell to php we want to access to the session's data.
+we can do this by using the `session_start` function.
+Here an example to how to use `$_SESSION`
+
+```php
+<?php
+  session_start();
+
+  //if is login form submit save the username
+  if(isset($_POST['user'])){
+    $_SESSION['user'] = $_POST['user'];
+    $_SESSION['logged'] = true;
+  }
+?>
+
+...
+
+<p>Hi mister <?php echo $_SESSION['user']; ?></p>
+```
