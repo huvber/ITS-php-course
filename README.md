@@ -5,9 +5,10 @@
 * 01 Introduction
 * 02 Syntax and basic operation
 * 03 Function
-* 05 Array
-* 04 Flow Control
-* 04 Request in PHP (SUPERGLOBALS)
+* 04 Array
+* 05 Flow Control
+* 06 Request in PHP (SUPERGLOBALS)
+* 07 Include and Require
 
 ## Introduction
 
@@ -475,3 +476,90 @@ Here an example to how to use `$_SESSION`
 
 <p>Hi mister <?php echo $_SESSION['user']; ?></p>
 ```
+
+## Include & Require
+Obviously PHP programming doesn't consist in mere one page script. Big applications are possible in PHP
+even if you doesn't heard about (see Facebook or Wordpress).
+In order to create bigger application we need something to connect different script and different files.
+We can do that using the `require`, `require_once`, `include` and `include_once` function.
+These functions will allow you to include inside your code page from another code.
+Here an example:
+```php
+<?php
+  //variables.php
+  $var1 = 1;
+  $var2 = 2;
+  $var3 = $var1 + $var2;
+?>
+```
+> variables.php
+
+```php
+<?php
+  include './variables.php';
+  echo $var3 + $var2; //will print 5
+?>
+```
+> main.php
+
+As noticed in the above example what is included will be available after the inclusion
+command.
+
+The difference between `include` and `require` is that if the file asked after the command is missing
+`require` will throw an error and will sto the execution. `include` instead will throw a warning
+and will continue the execution.
+
+It's important to know that an included script can include others. They will be include in the order you will write.
+It's also important to know that every time you will include (or require) a script it will be executed.
+In order to avoid that you can use the `*_once` alternative of the functions. That will check if in you included
+hierarchy will be the file you're trying to include and if there is wont do anything.
+
+`include` and `require` allow you to load php files but these couldn't have php script. This is very useful
+for example for html templating:
+
+```php
+<!DOCTYPE html>
+<html>
+  <head>
+    <?php include "html_header.php"; ?>
+  </head>
+  <body>
+    <?php include "header.php"; ?>
+    <main>
+      ...
+    </main>
+    <?php include "footer.php"; ?>
+  </body>
+</html>
+```
+> main.php
+
+```php
+<title>HTML Template with PHP include</title>
+<meta name="description" content="useful example" />
+```
+> html_header.php
+
+```php
+<?php include 'global_function.php'; ?>
+<header>
+  <nav>
+    <h1><?php get_site_title(); ?><h1>
+  </nav>
+</header>
+```
+> header.php
+
+```php
+  <footer>Power by us</footer>
+```
+> footer.php
+
+```php
+<?php
+  function get_site_title(){
+    echo "Site Title";
+  }
+?>
+```
+> global_function.php
