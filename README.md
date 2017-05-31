@@ -563,3 +563,101 @@ for example for html templating:
 ?>
 ```
 > global_function.php
+
+## OOP with PHP
+Like any other modern languages PHP can be written using Object Oriented programming
+technique. OOP was introduced in the 3rd version of PHP but was the 5th version to
+introduce a strong interfaces to use that technique.
+Like in Java OOP in PHP is based on class and instances. You can define a class
+like this:
+
+```php
+<?php
+  class ClassName {
+    public publicProperty;
+    protected protectedProperty;
+    private privateProperty;
+
+    function __constructor(){
+
+    }
+
+    public function publicMethod($args){
+      //...
+      $this->privateMethod();
+
+    }
+
+    private function privateMethod(){
+      //...
+    }
+
+  }
+
+  //...
+
+  $instance = new ClassName();
+?>
+```
+
+In the example above you can see most of the main structure of a class. In the beginning
+of the class there are some **properties**. A property is a normal variable precede by
+the **visibility** of the property. The **visibility** of the property (or a method)
+define where and who can access to methods or properties inside and outside of the class.
+There are three level of visibility:
+
+* `private` :
+
+    a private property or method is visible only inside the class itself
+    and is accessible only by the method of the class.
+
+* `protected` :
+
+    a protected property or method is visible inside the class itself and inside
+    all its subclass.
+
+* `public` :
+
+    a public property or method is accessible in all the scope the class is defined to.
+    in general a public property is accessible directly invoking them.
+
+Is it possible to define **methods** as shows above. A method is a function defined
+inside the class. Like properties it's possible to define the visibility of a method.
+If a method is defined without visibility is *public* as default.
+A method can access to all the properties and methods of its class and all
+the public/protected properties and methods of eventually parent class.
+A method can access to all non-static properties using the variable `$this` follow
+by the arrow operator `->`.
+
+`$this` is a reference to the instance of the class inside it.
+
+Is it possible to define a `static` property or method by using `static` keyword
+before the definition like the following example:
+
+```php
+  class Car {
+    private static wheels_number = 4;
+
+    public static function get_wheels_number(){
+      return self::wheels_number;
+    }
+  }
+
+  class Suv extends Car {
+    static driving_wheels = 4; //this is public as default
+
+    static function non_driving_wheels(){
+      return parent::get_wheels_number() - self::driving_wheels;
+    }
+  }
+
+  $panda = new Car();
+  echo $panda->wheels_number; //FATAL ERROR: the property is private
+
+  echo Car::get_wheels_number();
+
+  $x3 = new Suv();
+  echo $x3->driving_wheels; //FATAL ERROR: the property is static so isn't accessible by ->
+  echo $x3::$driving_wheels; //good
+   
+```
