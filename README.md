@@ -675,3 +675,11 @@ You can do that by using the `extends` keyword. A subclass inherit all the
 property and method of a superclass and it can access to all the `public` and `protected`
 methods and properties of that. If you want to call a method of a superclass you can use
 the keyword `parent::` even if the method isn't `static`.
+
+Form a better explanation of all the OOP in PHP you should read the following guide:
+
+http://php.net/manual/en/language.oop5.php
+
+It will explain all the possibilities of the Object oriented in PHP.
+
+ 
