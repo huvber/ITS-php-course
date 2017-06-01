@@ -661,3 +661,17 @@ before the definition like the following example:
   echo $x3::$driving_wheels; //good
    
 ```
+
+A `static` property is a property that is available without instantiate the class.
+If you define a `static` method you should be aware that method doesn't modify any
+instance's property. 
+
+In the example you should also see that to access inside the class to a `static`
+property you should use `self::`.
+
+You can also see another characteristic of the OOP: the **inheritance**. Is
+it possible to create a subclass of a superclass (like in any other language). 
+You can do that by using the `extends` keyword. A subclass inherit all the 
+property and method of a superclass and it can access to all the `public` and `protected`
+methods and properties of that. If you want to call a method of a superclass you can use
+the keyword `parent::` even if the method isn't `static`.
